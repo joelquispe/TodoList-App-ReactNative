@@ -2,36 +2,34 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useEffect, useState } from 'react';
 import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import IProduct from '../interfaces/product.interface';
-import { products } from '../(data)/data';
+import ITask from '../interfaces/task.interface';
+import { tasks } from '../(data)/data';
 import uuid from 'react-native-uuid';
 
-const FormProductScreen = () => {
+const FormTaskScreen = () => {
 	const router = useRouter();
 	const parameters = useLocalSearchParams();
-	const [tfName, setTfName] = useState('');
+	const [tfTitle, setTfTitle] = useState('');
 	const [tfDescription, setTfDescription] = useState('');
-	const [tfPrice, setTfPrice] = useState('');
+
 
 	const onSave = () => {
-		const newProduct: IProduct = {
+		const newTask: ITask = {
 			id: uuid.v4().toString(),
-			name: tfName,
+			title: tfTitle,
 			description: tfDescription,
-			price: Number(tfPrice),
 		};
-		products.push(newProduct);
+		tasks.push(newTask);
 	};
 
 	const onUpdate = () => {
-		const index = products.findIndex((product) => product.id === parameters.id);
-		const updateProduct = products[index];
-		updateProduct.name = tfName;
-		updateProduct.description = tfDescription;
-		updateProduct.price = Number(tfPrice);
-		products[index] = updateProduct;
+		const index = tasks.findIndex((task) => task.id === parameters.id);
+		const updateTask = tasks[index];
+		updateTask.title= tfTitle;
+		updateTask.description = tfDescription;
+		tasks[index] = updateTask;
 	};
-	
+
 	const onHandleForm = () => {
 		if (parameters.id != '') {
 			onUpdate();
@@ -42,12 +40,12 @@ const FormProductScreen = () => {
 	};
 	const init = () => {
 		if (parameters.id != '') {
-			const product: IProduct | undefined = products.find(
-				(product) => product.id === parameters.id
+			const task: ITask | undefined = tasks.find(
+				(task) => task.id === parameters.id
 			);
-			setTfName(product!.name);
-			setTfDescription(product!.description);
-			setTfPrice(product!.price.toString());
+			setTfTitle(task!.title);
+			setTfDescription(task!.description);
+			
 		}
 	};
 
@@ -66,12 +64,12 @@ const FormProductScreen = () => {
 				name="chevron-back-outline"
 			></Ionicons>
 			<Text className="text-white font-bold text-2xl my-4">
-				{parameters.id != '' ? 'Editar Producto' : 'Crear Producto'}
+				{parameters.id != '' ? 'Editar Tarea' : 'Crear Tarea'}
 			</Text>
 			<TextInput
 				className="rounded-md p-3 bg-gray-200 mb-4"
-				onChangeText={setTfName}
-				value={tfName}
+				onChangeText={setTfTitle}
+				value={tfTitle}
 				placeholder="Nombre"
 			></TextInput>
 
@@ -81,12 +79,7 @@ const FormProductScreen = () => {
 				value={tfDescription}
 				placeholder="Descripción"
 			></TextInput>
-			<TextInput
-				className="rounded-md p-3 bg-gray-200 mb-6"
-				onChangeText={setTfPrice}
-				value={tfPrice}
-				placeholder="Precio"
-			></TextInput>
+		
 			<TouchableOpacity
 				onPress={onHandleForm}
 				className="bg-yellow-500 rounded-md p-4"
@@ -97,4 +90,4 @@ const FormProductScreen = () => {
 	);
 };
 
-export default FormProductScreen;
+export default FormTaskScreen;

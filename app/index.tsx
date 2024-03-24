@@ -1,22 +1,22 @@
-import { Button, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import { products } from './(data)/data';
+import { ScrollView, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Link, useRouter } from 'expo-router';
+import { useRouter } from 'expo-router';
 import Toast from 'react-native-toast-message';
 import { useState } from 'react';
+import { tasks } from './(data)/data';
 const HomeScreen = () => {
 	const [isLoading, setIsLoading] = useState(false);
 	const router = useRouter();
 	const onDelete = (id: string) => {
 		setIsLoading(true);
 		setTimeout(() => {
-			const index = products.findIndex((product) => product.id === id);
-			products.splice(index, 1);
-			
+			const index = tasks.findIndex((task) => task.id === id);
+			tasks.splice(index, 1);
+
 			setIsLoading(false);
 			Toast.show({
 				type: 'success',
-				text1: 'Producto eliminado',
+				text1: 'Tarea eliminado',
 				position: 'bottom',
 				visibilityTime: 2000,
 				// text2: 'This is some something 👋'
@@ -36,20 +36,20 @@ const HomeScreen = () => {
 			<Toast />
 			<View
 				onTouchEnd={() => {
-					router.push({ pathname: '/formProduct', params: { id: '' } });
+					router.push({ pathname: '/formTask', params: { id: '' } });
 				}}
 				className="z-10 shadow-2xl rounded-lg absolute bottom-11 right-7 w-[40px] h-[40px] bg-white flex justify-center items-center "
 			>
 				<Icon size={25} name="plus"></Icon>
 			</View>
 			<ScrollView>
-				{products.map((product, index) => {
+				{tasks.map((task, index) => {
 					return (
 						<TouchableOpacity
 							onPress={() =>
 								router.push({
-									pathname: '/formProduct',
-									params: { id: product.id },
+									pathname: '/formTask',
+									params: { id: task.id },
 								})
 							}
 							className="w-full bg-gray-200 rounded-md p-4 mb-3 flex flex-row justify-between items-center"
@@ -57,17 +57,17 @@ const HomeScreen = () => {
 						>
 							<View>
 								<Text className="text-black font-bold text-md">
-									{product.name}
+									{task.title}
 								</Text>
 								<Text className="text-black text-sm">
-									Precio: {product.price}
+									Descripción: {task.description}
 								</Text>
 							</View>
 							<Icon
 								size={20}
 								className="z-50"
 								name="trash"
-								onPress={() => onDelete(product.id)}
+								onPress={() => onDelete(task.id)}
 							></Icon>
 						</TouchableOpacity>
 					);
